@@ -1,6 +1,6 @@
 # Python Development Environment
 
-This project provides a Docker-based Python development environment. It includes Python, Git, Zsh, and OpenSSH, and is configured to use your SSH keys for Git operations.
+This project provides a Docker-based Python development environment. It includes Python, Git, Zsh, OpenSSH, and other useful development tools. It is configured to use your SSH keys for Git operations.
 
 ## Project Structure
 
@@ -9,14 +9,17 @@ python-dev-environment/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── run-python-container.sh
+├── setup-ssh.sh
 ├── README.md
-
+├── .env.example
 
 - `Projects/`: This is where you can put your Python projects.
 - `Dockerfile`: Defines the Docker image.
 - `docker-compose.yml`: Configures the Docker services.
 - `run-python-container.sh`: A script to build, run, and exec into the Docker container.
+- `setup-ssh.sh`: A script to set up SSH keys inside the container.
 - `README.md`: This file.
+- `.env.example`: Example environment variables file.
 
 ## Getting Started
 
@@ -27,17 +30,25 @@ python-dev-environment/
     cd python-dev-environment
     ```
 
-2. **Ensure you have Docker and Docker Compose installed**.
+2. **Copy your SSH keys to the `ssh/` directory**:
 
-3. **Make sure your SSH keys are set up and located in `~/.ssh`**.
+    ```sh
+    mkdir ssh
+    cp ~/.ssh/id_rsa ssh/
+    cp ~/.ssh/id_rsa.pub ssh/
+    ```
 
-4. **Run the setup script**:
+3. **Ensure you have Docker and Docker Compose installed**.
+
+4. **Make sure your SSH keys are set up and located in `~/.ssh`**.
+
+5. **Run the setup script**:
 
     ```sh
     ./run-python-container.sh
     ```
 
-This script will build the Docker container, start it in detached mode, and then open an interactive shell inside the container.
+This script will build the Docker container, start it in detached mode, set up SSH keys, and then open an interactive shell inside the container.
 
 ## Usage
 
