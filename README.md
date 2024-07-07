@@ -15,28 +15,30 @@ This repository provides a Docker-based development environment for Python proje
 
 Install using Homebrew:
 
-` ` `
-sh
+```sh
 brew install go-task/tap/go-task
-` ` `
+```
+
 
 ### Linux
+```sh
+git clone https://github.com/Zhawrdahn/python-dev-environment.git
+cd python-dev-environment
+```
 
 Install using the installation script:
 
-` ` `
-sh
+```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/go-task/task/master/install-task.sh)"
-` ` `
+```
 
 ### Windows
 
 Install using Scoop:
 
-` ` `
-sh
+```sh
 scoop install go-task
-` ` `
+```
 
 ## Setup
 
@@ -44,11 +46,10 @@ scoop install go-task
 
 Clone this repository to your local machine:
 
-` ` `
-sh
+```sh
 git clone https://github.com/yourusername/python-dev-environment.git
 cd python-dev-environment
-` ` `
+```
 
 ### 2. Ensure Your SSH Keys are Available
 
