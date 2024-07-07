@@ -23,7 +23,7 @@ python-dev-environment/
 1. **Clone the repository**:
 
     ```sh
-    git clone https://github.com/yourusername/python-dev-environment.git
+    git clone https://github.com/Zhawrdahn/python-dev-environment.git
     cd python-dev-environment
     ```
 
