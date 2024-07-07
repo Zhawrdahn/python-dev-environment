@@ -6,9 +6,10 @@ services:
     container_name: python-dev-container
     volumes:
       - ./Projects:/workspace
-      - ~/.ssh:/root/.ssh:rw
+      - ./ssh:/workspace/ssh:ro
     ports:
       - "8888:8888" # Port for Jupyter Notebook or other web services
     environment:
       - DEBIAN_FRONTEND=noninteractive
-    command: tail -f /dev/null
+      - SSH_PRIVATE_KEY=/workspace/ssh/id_rsa
+    command: ["/bin/bash", "-c", "/workspace/setup-ssh.sh && tail -f /dev/null"]
