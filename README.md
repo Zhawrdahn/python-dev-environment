@@ -1,62 +1,150 @@
 # Python Development Environment
 
-This project provides a Docker-based Python development environment. It includes Python, Git, Zsh, and OpenSSH, and is configured to use your SSH keys for Git operations.
+This repository provides a Docker-based development environment for Python projects, with support for SSH key configuration.
 
-## Project Structure
+## Prerequisites
 
-python-dev-environment/
-├── Projects/
-├── Dockerfile
-├── docker-compose.yml
-├── run-python-container.sh
-├── README.md
+- Docker
+- Docker Compose
+- `task` CLI tool
+- SSH keys (`id_rsa` and `id_rsa.pub`) located in `~/.ssh`
+
+## Installation of `task` CLI Tool
+
+### macOS
+
+Install using Homebrew:
+
+```sh
+brew install go-task/tap/go-task
+```
 
 
-- `Projects/`: This is where you can put your Python projects.
-- `Dockerfile`: Defines the Docker image.
-- `docker-compose.yml`: Configures the Docker services.
-- `run-python-container.sh`: A script to build, run, and exec into the Docker container.
-- `README.md`: This file.
+### Linux
+```sh
+git clone https://github.com/Zhawrdahn/python-dev-environment.git
+cd python-dev-environment
+```
 
-## Getting Started
+Install using the installation script:
 
-1. **Clone the repository**:
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/go-task/task/master/install-task.sh)"
+```
 
-    ```sh
-    git clone https://github.com/Zhawrdahn/python-dev-environment.git
-    cd python-dev-environment
-    ```
+### Windows
 
-2. **Ensure you have Docker and Docker Compose installed**.
+Install using Scoop:
 
-3. **Make sure your SSH keys are set up and located in `~/.ssh`**.
+```sh
+scoop install go-task
+```
 
-4. **Run the setup script**:
+## Setup
 
-    ```sh
-    ./run-python-container.sh
-    ```
+### 1. Clone the Repository
 
-This script will build the Docker container, start it in detached mode, and then open an interactive shell inside the container.
+Clone this repository to your local machine:
 
-## Usage
+```sh
+git clone https://github.com/yourusername/python-dev-environment.git
+cd python-dev-environment
+```
 
-- **To access the container** if it is already running:
+### 2. Ensure Your SSH Keys are Available
 
-    ```sh
-    docker exec -it python-dev-container zsh
-    ```
+Ensure your SSH keys (`id_rsa` and `id_rsa.pub`) are in the `~/.ssh` directory on your host machine. These keys will be used within the container to manage operations requiring SSH.
 
-- **To stop the container**:
+## Using the Taskfile
 
-    ```sh
-    docker-compose down
-    ```
+The `Taskfile.yml` provides various tasks for managing the Docker environment. Below are the available tasks:
 
-## Contributing
+### Build the Docker Image
 
-Feel free to submit issues or pull requests if you have suggestions or improvements.
+Build the Docker image:
 
-## License
+```sh
+task build
+```
 
-This project is licensed under 
+### Run the Docker Container
+
+To run the Docker container:
+
+```sh
+task run
+```
+
+### Stop the Docker Container
+
+To stop the Docker container:
+
+```sh
+task stop
+```
+
+### Execute a Shell in the Running Container
+
+To execute a shell in the running container:
+
+```sh
+task exec
+```
+
+### Show Logs of the Running Container
+
+To show logs of the running container:
+
+```sh
+task logs
+```
+
+### Rebuild, Run, and Execute a Shell in the Docker Container
+
+To rebuild the Docker image, run the container, and execute a shell inside it:
+
+```sh
+task rebuild
+```
+
+### Run `setup-ssh.sh` Script in the Running Container
+
+To run the `setup-ssh.sh` script in the running container:
+
+```sh
+task setup-ssh
+```
+
+### Clean Up Docker Environment
+
+To clean up the Docker environment (remove stopped containers, unused images, etc.):
+
+```sh
+task clean
+```
+
+## Troubleshooting
+
+If you encounter any issues with SSH keys or permissions, ensure that:
+
+- Your SSH keys (`id_rsa` and `id_rsa.pub`) are present in the `~/.ssh` directory.
+- The permissions of the keys are correct:
+
+```sh
+chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
+```
+
+For further assistance, check the logs of the running container:
+
+```sh
+task logs
+```
+
+## Conclusion
+
+This setup provides a consistent and isolated Python development environment using Docker, with convenient task automation using `Taskfile.yml`. It simplifies the process of building, running, and managing your development environment, making it easy to get started and maintain your projects.
+
+Feel free to contribute to this repository by submitting issues.
+
+Happy coding!

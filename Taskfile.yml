@@ -1,0 +1,56 @@
+version: '3'
+
+vars:
+  docker_compose: docker-compose
+  container_name: python-dev-container
+  image_name: python-dev-environment
+
+tasks:
+  default:
+    cmds:
+      - task: build
+      - task: run
+    desc: "Build and run the Docker container"
+
+  build:
+    cmds:
+      - "{{.docker_compose}} build --no-cache"
+    desc: "Build the Docker image"
+
+  run:
+    cmds:
+      - "{{.docker_compose}} up -d"
+    desc: "Run the Docker container"
+
+  stop:
+    cmds:
+      - "{{.docker_compose}} down"
+    desc: "Stop the Docker container"
+
+  exec:
+    cmds:
+      - "docker exec -it {{.container_name}} zsh"
+    desc: "Execute a shell in the running container"
+
+  logs:
+    cmds:
+      - "{{.docker_compose}} logs -f {{.container_name}}"
+    desc: "Show logs of the running container"
+
+  rebuild:
+    cmds:
+      - task: stop
+      - task: build
+      - task: run
+      - task: exec
+    desc: "Rebuild and run the Docker container"
+
+  setup-ssh:
+    cmds:
+      - "docker exec -it {{.container_name}} /workspace/setup-ssh.sh"
+    desc: "Run setup-ssh.sh script in the running container"
+
+  clean:
+    cmds:
+      - "docker system prune -f"
+    desc: "Clean up Docker environment (remove stopped containers, unused images, etc.)"
