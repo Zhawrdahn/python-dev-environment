@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  python-dev:
+    build: .
+    container_name: python-dev-container
+    volumes:
+      - ./Projects:/workspace
+      - ~/.ssh:/root/.ssh:rw
+    ports:
+      - "8888:8888" # Port for Jupyter Notebook or other web services
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: tail -f /dev/null
