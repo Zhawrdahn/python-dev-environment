@@ -1,30 +1,41 @@
-# Use official Ubuntu base image (22.04 recommended for current LTS)
-FROM ubuntu:22.04
-
-# Install Python, Git, OpenSSH, and other necessary tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    curl \
-    git \
-    zsh \
-    openssh-client \
-    vim \
-    nano \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Use a lighter, Python-specific base image
+FROM python:3.11-slim-buster
 
 # Set working directory
 WORKDIR /workspace
 
-# Copy setup-ssh.sh script
+# Install essential tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    git \
+    openssh-client \
+    zsh \
+    vim \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Optionally install Code Server if required
+ARG INSTALL_CODE_SERVER=false
+RUN if [ "$INSTALL_CODE_SERVER" = "true" ]; then \
+    curl -fsSL https://code-server.dev/install.sh | sh; \
+    fi
+
+# Copy necessary scripts and files
 COPY setup-ssh.sh /workspace/setup-ssh.sh
 
-# List contents of /workspace for debugging
-RUN ls -l /workspace
+# Set permissions and run the setup script
+RUN chmod +x /workspace/setup-ssh.sh && ./setup-ssh.sh
 
-# Set shell
-SHELL ["/usr/bin/zsh", "-c"]
+# Use the Zsh shell if installed
+SHELL ["/bin/zsh", "-c"]
 
-# Default command
-CMD ["/bin/bash", "-c", "/workspace/setup-ssh.sh && tail -f /dev/null"]
+# Define default command
+CMD if [ "$CODE_SERVER_ENABLED" = "true" ]; then \
+        code-server --bind-addr 0.0.0.0:8080 --auth none; \
+    else \
+        tail -f /dev/null; \
+    fi
+
+# Add a health check (if using a service like Code Server)
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
