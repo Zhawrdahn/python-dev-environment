@@ -2,14 +2,35 @@ version: '3.8'
 
 services:
   python-dev:
-    build: .
+    build:
+      context: .
+      args:
+        # Pass build-time variables
+        INSTALL_ZSH: "true"
+        INSTALL_VIM: "false"
+        INSTALL_CODE_SERVER: "true"
     container_name: python-dev-container
     volumes:
-      - ./Projects:/workspace/projects
-      - ~/.ssh:/workspace/ssh:ro
+      - type: volume
+        source: projects
+        target: /workspace/projects
+      - type: bind
+        source: ~/.ssh
+        target: /workspace/ssh
+        read_only: true
     ports:
       - "8888:8888" # Jupyter Notebook (if needed)
+      - "8080:8080" # Code Server
     environment:
       - DEBIAN_FRONTEND=noninteractive
-    command: ["/bin/bash", "-c", "/workspace/setup-ssh.sh && tail -f /dev/null"]
+      - CODE_SERVER_ENABLED=true
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  projects:
