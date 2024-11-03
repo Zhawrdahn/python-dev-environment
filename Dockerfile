@@ -23,8 +23,10 @@ RUN if [ "$INSTALL_CODE_SERVER" = "true" ]; then \
 # Copy necessary scripts and files
 COPY setup-ssh.sh /workspace/setup-ssh.sh
 
-# Set permissions and run the setup script
-RUN chmod +x /workspace/setup-ssh.sh && ./setup-ssh.sh
+# # Set permissions and run the setup script
+# RUN chmod +x /workspace/setup-ssh.sh && ./setup-ssh.sh
+
+RUN chmod +x /workspace/setup-ssh.sh && /workspace/setup-ssh.sh
 
 # Use the Zsh shell if installed
 SHELL ["/bin/zsh", "-c"]
